@@ -4,39 +4,95 @@ document.addEventListener("DOMContentLoaded", function () {
     const payButton = document.getElementById("payButton");
 
 
-    // Wallet form
+// Wallet form
 
-    if (walletForm) {
+if (walletForm) {
 
-        walletForm.addEventListener("submit", function(event){
+    walletForm.addEventListener("submit", async function(event){
 
-            event.preventDefault();
-
-
-            const wallet =
-                document.getElementById("wallet").value.trim();
-
-            const network =
-                document.getElementById("network").value;
+        event.preventDefault();
 
 
-            if(wallet.length < 10){
+        const wallet =
+            document.getElementById("wallet").value.trim();
 
-                alert("Please enter a valid public wallet address.");
-
-                return;
-
-            }
+        const network =
+            document.getElementById("network").value;
 
 
-            const walletRequest = {
+        const result =
+            document.getElementById("walletResult");
 
-                address: wallet,
-                blockchain: network,
-                date: new Date().toISOString()
 
-            };
+        if(wallet.length < 10){
 
+            alert("Please enter a valid public wallet address.");
+
+            return;
+
+        }
+
+
+        if(result){
+
+            result.innerHTML =
+            "🔍 Checking wallet...";
+        }
+
+
+        // Save wallet request
+
+        const walletRequest = {
+
+            address: wallet,
+            blockchain: network,
+            date: new Date().toISOString()
+
+        };
+
+
+        localStorage.setItem(
+            "walletRequest",
+            JSON.stringify(walletRequest)
+        );
+
+
+        // Temporary wallet preview
+
+        if(result){
+
+            result.innerHTML = `
+
+            <div class="report">
+
+            <h3>
+            Wallet Found
+            </h3>
+
+            <p>
+            Network: ${network}
+            </p>
+
+            <p>
+            Address:
+            </p>
+
+            <code>${wallet}</code>
+
+            <p>
+            Full report available after payment.
+            </p>
+
+            </div>
+
+            `;
+
+        }
+
+
+    });
+
+}
 
             // Save temporarily in browser
 
