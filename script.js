@@ -2,99 +2,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const walletForm = document.getElementById("walletForm");
     const payButton = document.getElementById("payButton");
+    const walletResult = document.getElementById("walletResult");
 
 
-// Wallet form
+    // Wallet Form
 
-if (walletForm) {
+    if (walletForm) {
 
-    walletForm.addEventListener("submit", async function(event){
+        walletForm.addEventListener("submit", function(event) {
 
-        event.preventDefault();
-
-
-        const wallet =
-            document.getElementById("wallet").value.trim();
-
-        const network =
-            document.getElementById("network").value;
+            event.preventDefault();
 
 
-        const result =
-            document.getElementById("walletResult");
+            const wallet = document
+                .getElementById("wallet")
+                .value
+                .trim();
 
 
-        if(wallet.length < 10){
-
-            alert("Please enter a valid public wallet address.");
-
-            return;
-
-        }
+            const network = document
+                .getElementById("network")
+                .value;
 
 
-        if(result){
 
-            result.innerHTML =
-            "🔍 Checking wallet...";
-        }
+            if (wallet.length < 10) {
 
+                alert(
+                    "Please enter a valid public wallet address."
+                );
 
-        // Save wallet request
+                return;
 
-        const walletRequest = {
-
-            address: wallet,
-            blockchain: network,
-            date: new Date().toISOString()
-
-        };
+            }
 
 
-        localStorage.setItem(
-            "walletRequest",
-            JSON.stringify(walletRequest)
-        );
+
+            const walletRequest = {
+
+                address: wallet,
+                blockchain: network,
+                date: new Date().toISOString()
+
+            };
 
 
-        // Temporary wallet preview
-
-        if(result){
-
-            result.innerHTML = `
-
-            <div class="report">
-
-            <h3>
-            Wallet Found
-            </h3>
-
-            <p>
-            Network: ${network}
-            </p>
-
-            <p>
-            Address:
-            </p>
-
-            <code>${wallet}</code>
-
-            <p>
-            Full report available after payment.
-            </p>
-
-            </div>
-
-            `;
-
-        }
-
-
-    });
-
-}
-
-            // Save temporarily in browser
 
             localStorage.setItem(
                 "walletRequest",
@@ -102,16 +54,43 @@ if (walletForm) {
             );
 
 
-            alert(
-                "Wallet saved. Continue to payment to receive your report."
-            );
+
+            if (walletResult) {
+
+                walletResult.innerHTML = `
+
+                <div class="report">
+
+                    <h3>
+                    Wallet Detected
+                    </h3>
 
 
-            // Temporary payment page
-            // We will replace this later with Stripe/Crypto payment verification
+                    <p>
+                    Blockchain:
+                    <strong>${network}</strong>
+                    </p>
 
-            window.location.href =
-            "https://example.com/payment";
+
+                    <p>
+                    Public Address:
+                    </p>
+
+
+                    <code>
+                    ${wallet}
+                    </code>
+
+
+                    <p>
+                    Ready for report generation.
+                    </p>
+
+                </div>
+
+                `;
+
+            }
 
 
         });
@@ -120,18 +99,20 @@ if (walletForm) {
 
 
 
-    // Payment button
 
-    if(payButton){
+    // Payment Button
 
-        payButton.addEventListener("click", function(){
+    if (payButton) {
+
+        payButton.addEventListener("click", function() {
 
 
             const request =
-            localStorage.getItem("walletRequest");
+                localStorage.getItem("walletRequest");
 
 
-            if(!request){
+
+            if (!request) {
 
                 alert(
                     "Please enter your wallet address first."
@@ -142,8 +123,9 @@ if (walletForm) {
             }
 
 
+
             alert(
-                "Payment system will be connected in the next step."
+                "Payment system will be connected next."
             );
 
 
