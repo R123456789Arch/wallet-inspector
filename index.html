@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,17 +15,18 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
+
 <body>
+
 
 <nav>
 
 <div class="logo">
-Wallet Inspector
+🔐 Wallet Inspector
 </div>
+
 
 <ul>
 
@@ -37,33 +40,51 @@ Wallet Inspector
 
 </nav>
 
+
+
 <header>
 
 <div class="hero">
 
+
 <h1>
-Blockchain Wallet Analyzer
+Discover Your Wallet's Blockchain Story
 </h1>
 
+
 <p>
-
-Analyze any public cryptocurrency wallet using publicly available blockchain information.
-
+Explore balances, tokens, transactions, wallet age, and blockchain activity using only public wallet data.
 </p>
+
+
+
 <div class="chains">
 
 <span>₿ Bitcoin</span>
+
 <span>Ξ Ethereum</span>
+
 <span>◎ Solana</span>
+
 <span>⬡ Polygon</span>
+
 <span>◆ BNB Chain</span>
 
 </div>
+
+
+
 <div class="card">
 
-<h2>Analyze a Wallet</h2>
+
+<h2>
+Analyze a Wallet
+</h2>
+
+
 
 <form id="walletForm">
+
 
 <input
 type="text"
@@ -71,237 +92,298 @@ id="wallet"
 placeholder="Enter Public Wallet Address"
 required>
 
+
+
 <select id="network">
 
-<option value="ethereum">Ethereum</option>
+<option value="ethereum">
+Ethereum
+</option>
 
-<option value="bitcoin">Bitcoin</option>
+<option value="bitcoin">
+Bitcoin
+</option>
 
-<option value="polygon">Polygon</option>
+<option value="polygon">
+Polygon
+</option>
 
-<option value="bnb">BNB Chain</option>
+<option value="bnb">
+BNB Chain
+</option>
 
-<option value="solana">Solana</option>
+<option value="solana">
+Solana
+</option>
 
 </select>
 
+
+
 <button type="submit">
-
 Continue
-
 </button>
+
+
 
 </form>
 
-</div>
 
 </div>
+
+
+</div>
+
 
 </header>
 
+
+
+
 <section id="features">
 
+
 <h2>
-
 Features
-
 </h2>
+
+
 
 <div class="grid">
 
+
+
 <div class="feature">
 
-<h3>Portfolio Value</h3>
+<h3>
+Portfolio Value
+</h3>
 
 <p>
-
 Estimated wallet value based on publicly available blockchain information.
-
 </p>
 
 </div>
 
+
+
+
 <div class="feature">
 
-<h3>Token Holdings</h3>
+<h3>
+Token Holdings
+</h3>
 
 <p>
-
 ERC-20 and other supported token balances.
-
 </p>
 
 </div>
 
+
+
+
 <div class="feature">
 
-<h3>NFT Collection</h3>
+<h3>
+NFT Collection
+</h3>
 
 <p>
-
 View NFTs associated with supported wallets.
-
 </p>
 
 </div>
 
+
+
+
 <div class="feature">
 
-<h3>Transaction History</h3>
+<h3>
+Transaction History
+</h3>
 
 <p>
-
 Recent blockchain activity and transfers.
-
 </p>
 
 </div>
 
+
+
+
 <div class="feature">
 
-<h3>Wallet Age</h3>
+<h3>
+Wallet Age
+</h3>
 
 <p>
-
 Estimate the age of the wallet from its earliest recorded activity.
-
 </p>
 
 </div>
+
+
+
 
 <div class="feature">
 
-<h3>Security Indicators</h3>
+<h3>
+Security Indicators
+</h3>
 
 <p>
-
-Basic risk indicators based on publicly available transaction patterns.
-
+Basic risk indicators based on public blockchain activity.
 </p>
 
 </div>
 
+
+
 </div>
+
 
 </section>
+
+
+
+
+
 
 <section id="pricing">
 
+
 <h2>
-
 Pricing
-
 </h2>
+
+
 
 <div class="price-card">
 
-<h3>Complete Wallet Report</h3>
 
-<h1>$2</h1>
+<h3>
+Complete Wallet Report
+</h3>
+
+
+<h1>
+$2
+</h1>
+
 
 <p>
-
 One-time payment
-
 </p>
+
+
 
 <ul>
 
-<li>Full Wallet Report</li>
+<li>✔ Full Wallet Report</li>
 
-<li>Portfolio Breakdown</li>
+<li>✔ Portfolio Breakdown</li>
 
-<li>Transaction Analysis</li>
+<li>✔ Transaction Analysis</li>
 
-<li>Token List</li>
+<li>✔ Token List</li>
 
-<li>NFT Detection</li>
+<li>✔ NFT Detection</li>
 
-<li>Download PDF</li>
+<li>✔ Download PDF</li>
 
 </ul>
 
+
+
 <button id="payButton">
-
 Continue to Payment
-
 </button>
+
+
 
 </div>
 
+
 </section>
+
+
+
+
+
 
 <section id="faq">
 
+
 <h2>
-
 Frequently Asked Questions
-
 </h2>
 
+
+
 <div class="faq">
 
 <h3>
-
 Is my wallet safe?
-
 </h3>
 
 <p>
-
-Yes. We only ask for your PUBLIC wallet address.
-
-Never enter your seed phrase or private key.
-
+Yes. We only use your PUBLIC wallet address. Never enter your seed phrase or private key.
 </p>
 
 </div>
 
+
+
 <div class="faq">
 
 <h3>
-
 What blockchains are supported?
-
 </h3>
 
 <p>
-
 Ethereum, Bitcoin, Polygon, Solana and BNB Chain.
-
 </p>
 
 </div>
+
+
 
 <div class="faq">
 
 <h3>
-
 When do I receive my report?
-
 </h3>
 
 <p>
-
-Immediately after your payment has been verified.
-
+After payment verification, the wallet analysis will be generated.
 </p>
 
 </div>
+
+
 
 </section>
+
+
+
+
 
 <footer>
 
 <p>
-
 © 2026 Wallet Inspector
-
 </p>
 
 </footer>
 
+
+
 <script src="script.js"></script>
 
+
 </body>
+
 </html>
