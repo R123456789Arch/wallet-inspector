@@ -1,3 +1,48 @@
+/* Blockchain badges */
+
+.chains{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:15px;
+
+margin:30px 0;
+
+}
+
+
+.chains span{
+
+background:rgba(255,255,255,.08);
+
+border:1px solid rgba(255,255,255,.15);
+
+padding:10px 20px;
+
+border-radius:30px;
+
+color:#e2e8f0;
+
+font-size:15px;
+
+transition:.3s;
+
+}
+
+
+.chains span:hover{
+
+background:#38bdf8;
+
+color:white;
+
+transform:translateY(-5px);
+
+}
 *{
     margin:0;
     padding:0;
