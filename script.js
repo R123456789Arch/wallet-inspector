@@ -1,4 +1,3 @@
-console.log("Wallet Inspector script loaded");
 document.addEventListener("DOMContentLoaded", function () {
 
     const walletForm = document.getElementById("walletForm");
