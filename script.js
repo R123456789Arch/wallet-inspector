@@ -27,27 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-            if (network !== "ethereum") {
+            if (!wallet) {
 
-                walletResult.innerHTML = `
-                    <div class="report">
-                        <h3>Coming Soon</h3>
-                        <p>This blockchain is not supported yet.</p>
-                    </div>
-                `;
-
-                return;
-
-            }
-
-
-
-            if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
-
-                alert(
-                    "Please enter a valid Ethereum wallet address."
-                );
-
+                alert("Please enter a wallet address.");
                 return;
 
             }
@@ -56,17 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             walletResult.innerHTML = `
 
-                <div class="report">
+            <div class="report">
 
-                    <h3>
-                    Loading Wallet Data...
-                    </h3>
+                <h3>
+                Loading Wallet Data...
+                </h3>
 
-                    <p>
-                    Connecting to Ethereum blockchain...
-                    </p>
-
-                </div>
+            </div>
 
             `;
 
@@ -75,141 +53,211 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
 
 
-                const balance =
-                    await getEthereumBalance(wallet);
+                let result;
 
 
 
-                const transactions =
-                    await getEthereumTransactions(wallet);
+                if (network === "ethereum") {
 
 
+                    if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
 
-                const walletRequest = {
-
-                    address: wallet,
-                    blockchain: "Ethereum",
-                    balance: balance,
-                    date: new Date().toISOString()
-
-                };
-
-
-
-                localStorage.setItem(
-                    "walletRequest",
-                    JSON.stringify(walletRequest)
-                );
-
-
-
-
-                walletResult.innerHTML = `
-
-                <div class="report">
-
-
-                    <h3>
-                    Wallet Detected
-                    </h3>
-
-
-
-                    <p>
-                    <strong>Blockchain:</strong>
-                    Ethereum
-                    </p>
-
-
-
-                    <p>
-                    <strong>Public Address:</strong>
-                    </p>
-
-
-                    <code>
-                    ${wallet}
-                    </code>
-
-
-
-                    <p>
-                    <strong>ETH Balance:</strong>
-                    ${balance} ETH
-                    </p>
-
-
-
-
-                    <h3>
-                    Recent Transactions
-                    </h3>
-
-
-
-                    ${
-                        transactions.length === 0
-
-                        ?
-
-                        "<p>No transactions found.</p>"
-
-                        :
-
-                        transactions.map(tx => `
-
-
-                        <div class="transaction">
-
-
-                            <p>
-                            <strong>Hash:</strong>
-                            </p>
-
-                            <code>
-                            ${tx.hash}
-                            </code>
-
-
-
-                            <p>
-                            <strong>From:</strong><br>
-                            ${tx.from}
-                            </p>
-
-
-
-                            <p>
-                            <strong>To:</strong><br>
-                            ${tx.to}
-                            </p>
-
-
-
-                            <p>
-                            <strong>Value:</strong>
-                            ${(Number(tx.value) / 1e18).toFixed(6)}
-                            ETH
-                            </p>
-
-
-
-                        </div>
-
-
-                        `).join("")
+                        throw new Error(
+                            "Invalid Ethereum address."
+                        );
 
                     }
 
 
 
-                </div>
-
-                `;
-
+                    const balance =
+                        await getEthereumBalance(wallet);
 
 
-            } catch(error) {
+
+                    const transactions =
+                        await getEthereumTransactions(wallet);
+
+
+
+                    result = `
+
+                    <div class="report">
+
+                        <h3>
+                        Ethereum Wallet
+                        </h3>
+
+
+                        <p>
+                        <strong>Address:</strong>
+                        </p>
+
+                        <code>
+                        ${wallet}
+                        </code>
+
+
+                        <p>
+                        <strong>ETH Balance:</strong>
+                        ${balance} ETH
+                        </p>
+
+
+
+                        <h3>
+                        Recent Transactions
+                        </h3>
+
+
+                        ${
+                            transactions.length
+
+                            ?
+
+                            transactions.map(tx => `
+
+                            <div class="transaction">
+
+                                <p>
+                                <strong>Hash:</strong>
+                                </p>
+
+                                <code>
+                                ${tx.hash}
+                                </code>
+
+
+                                <p>
+                                Value:
+                                ${(Number(tx.value) / 1e18).toFixed(6)}
+                                ETH
+                                </p>
+
+                            </div>
+
+                            `).join("")
+
+                            :
+
+                            "<p>No transactions found.</p>"
+
+                        }
+
+
+                    </div>
+
+                    `;
+
+
+                }
+
+
+
+
+
+                else if (network === "bitcoin") {
+
+
+                    if (
+                        !/^(1|3|bc1)[a-zA-HJ-NP-Z0-9]{25,90}$/
+                        .test(wallet)
+                    ) {
+
+                        throw new Error(
+                            "Invalid Bitcoin address."
+                        );
+
+                    }
+
+
+
+                    const balance =
+                        await getBitcoinBalance(wallet);
+
+
+
+                    result = `
+
+                    <div class="report">
+
+                        <h3>
+                        Bitcoin Wallet
+                        </h3>
+
+
+                        <p>
+                        <strong>Address:</strong>
+                        </p>
+
+
+                        <code>
+                        ${wallet}
+                        </code>
+
+
+                        <p>
+                        <strong>BTC Balance:</strong>
+                        ${balance} BTC
+                        </p>
+
+
+                    </div>
+
+                    `;
+
+
+                }
+
+
+
+                else {
+
+
+                    result = `
+
+                    <div class="report">
+
+                        <h3>
+                        Coming Soon
+                        </h3>
+
+                        <p>
+                        This blockchain is not available yet.
+                        </p>
+
+                    </div>
+
+                    `;
+
+
+                }
+
+
+
+
+                localStorage.setItem(
+                    "walletRequest",
+                    JSON.stringify({
+
+                        address: wallet,
+                        blockchain: network,
+                        date: new Date().toISOString()
+
+                    })
+                );
+
+
+
+                walletResult.innerHTML = result;
+
+
+
+            }
+
+
+
+            catch(error) {
 
 
                 console.error(error);
@@ -217,17 +265,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 walletResult.innerHTML = `
 
-                    <div class="report">
+                <div class="report">
 
-                        <h3>
-                        Error
-                        </h3>
+                    <h3>
+                    Error
+                    </h3>
 
-                        <p>
-                        Unable to retrieve wallet information.
-                        </p>
 
-                    </div>
+                    <p>
+                    ${error.message}
+                    </p>
+
+
+                </div>
 
                 `;
 
@@ -236,7 +286,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         });
-
 
     }
 
@@ -250,26 +299,6 @@ document.addEventListener("DOMContentLoaded", function () {
         payButton.addEventListener("click", function () {
 
 
-            const request =
-                localStorage.getItem("walletRequest");
-
-
-
-            if (!request) {
-
-
-                alert(
-                    "Please analyze a wallet first."
-                );
-
-
-                return;
-
-
-            }
-
-
-
             alert(
                 "Payment feature will be added later."
             );
@@ -281,13 +310,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
 });
 
 
 
 
 
+
+
+// =======================
+// ETHEREUM
+// =======================
 
 
 async function getEthereumBalance(address) {
@@ -309,10 +342,6 @@ async function getEthereumBalance(address) {
 
 
 
-    console.log("Balance:", data);
-
-
-
     if (data.status !== "1") {
 
         throw new Error(
@@ -328,10 +357,7 @@ async function getEthereumBalance(address) {
     ).toFixed(6);
 
 
-
 }
-
-
 
 
 
@@ -356,10 +382,6 @@ async function getEthereumTransactions(address) {
 
 
 
-    console.log("Transactions:", data);
-
-
-
     if (data.status !== "1") {
 
         return [];
@@ -370,6 +392,56 @@ async function getEthereumTransactions(address) {
 
     return data.result;
 
+
+}
+
+
+
+
+
+
+
+
+// =======================
+// BITCOIN
+// =======================
+
+
+async function getBitcoinBalance(address) {
+
+
+    const url =
+        `https://blockstream.info/api/address/${address}`;
+
+
+
+    const response =
+        await fetch(url);
+
+
+
+    const data =
+        await response.json();
+
+
+
+    const received =
+        data.chain_stats.funded_txo_sum;
+
+
+
+    const spent =
+        data.chain_stats.spent_txo_sum;
+
+
+
+    return (
+
+        (received - spent)
+        /
+        100000000
+
+    ).toFixed(8);
 
 
 }
