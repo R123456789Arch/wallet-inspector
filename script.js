@@ -10,26 +10,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (walletForm) {
 
-        walletForm.addEventListener("submit", async function (event) {
+        walletForm.addEventListener("submit", async function(event) {
 
             event.preventDefault();
 
 
-            const wallet = document
-                .getElementById("wallet")
-                .value
-                .trim();
+            const wallet =
+                document.getElementById("wallet").value.trim();
 
 
-            const network = document
-                .getElementById("network")
-                .value;
+            const network =
+                document.getElementById("network").value;
 
 
 
             if (!wallet) {
 
-                alert("Please enter a wallet address.");
+                alert("Enter a wallet address.");
                 return;
 
             }
@@ -41,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="report">
 
                 <h3>
-                Loading Wallet Data...
+                Loading blockchain data...
                 </h3>
 
             </div>
@@ -55,6 +52,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 let result;
 
+
+
+                // ==========================
+                // ETHEREUM
+                // ==========================
 
 
                 if (network === "ethereum") {
@@ -84,18 +86,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     <div class="report">
 
+
                         <h3>
                         Ethereum Wallet
                         </h3>
+
 
 
                         <p>
                         <strong>Address:</strong>
                         </p>
 
+
                         <code>
                         ${wallet}
                         </code>
+
 
 
                         <p>
@@ -108,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <h3>
                         Recent Transactions
                         </h3>
+
 
 
                         ${
@@ -130,19 +137,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
                                 <p>
                                 Value:
-                                ${(Number(tx.value) / 1e18).toFixed(6)}
+                                ${(Number(tx.value)/1e18).toFixed(6)}
                                 ETH
                                 </p>
 
+
                             </div>
 
+
                             `).join("")
+
 
                             :
 
                             "<p>No transactions found.</p>"
 
                         }
+
 
 
                     </div>
@@ -156,19 +167,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+                // ==========================
+                // BITCOIN
+                // ==========================
+
+
                 else if (network === "bitcoin") {
-
-
-                    if (
-                        !/^(1|3|bc1)[a-zA-HJ-NP-Z0-9]{25,90}$/
-                        .test(wallet)
-                    ) {
-
-                        throw new Error(
-                            "Invalid Bitcoin address."
-                        );
-
-                    }
 
 
 
@@ -177,13 +181,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+                    const transactions =
+                        await getBitcoinTransactions(wallet);
+
+
+
+
                     result = `
 
                     <div class="report">
 
+
                         <h3>
                         Bitcoin Wallet
                         </h3>
+
 
 
                         <p>
@@ -196,10 +208,74 @@ document.addEventListener("DOMContentLoaded", function () {
                         </code>
 
 
+
                         <p>
                         <strong>BTC Balance:</strong>
                         ${balance} BTC
                         </p>
+
+
+
+                        <h3>
+                        Recent Transactions
+                        </h3>
+
+
+
+
+                        ${
+                            transactions.length
+
+                            ?
+
+                            transactions.map(tx => `
+
+
+                            <div class="transaction">
+
+
+                                <p>
+                                <strong>Transaction ID:</strong>
+                                </p>
+
+
+                                <code>
+                                ${tx.txid}
+                                </code>
+
+
+
+                                <p>
+
+                                Status:
+
+                                ${
+                                    tx.status.confirmed
+
+                                    ?
+                                    "Confirmed"
+
+                                    :
+
+                                    "Pending"
+
+                                }
+
+                                </p>
+
+
+                            </div>
+
+
+                            `).join("")
+
+
+                            :
+
+                            "<p>No transactions found.</p>"
+
+                        }
+
 
 
                     </div>
@@ -236,15 +312,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+
                 localStorage.setItem(
+
                     "walletRequest",
+
                     JSON.stringify({
 
                         address: wallet,
+
                         blockchain: network,
-                        date: new Date().toISOString()
+
+                        date:
+                        new Date().toISOString()
 
                     })
+
                 );
 
 
@@ -287,6 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+
     }
 
 
@@ -295,17 +379,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (payButton) {
 
-
-        payButton.addEventListener("click", function () {
-
+        payButton.addEventListener("click", function(){
 
             alert(
-                "Payment feature will be added later."
+                "Payment system coming soon."
             );
 
-
         });
-
 
     }
 
@@ -316,11 +396,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+// =================================
+// ETHEREUM FUNCTIONS
+// =================================
 
-
-// =======================
-// ETHEREUM
-// =======================
 
 
 async function getEthereumBalance(address) {
@@ -342,7 +421,7 @@ async function getEthereumBalance(address) {
 
 
 
-    if (data.status !== "1") {
+    if(data.status !== "1") {
 
         throw new Error(
             data.result
@@ -353,11 +432,15 @@ async function getEthereumBalance(address) {
 
 
     return (
+
         Number(data.result) / 1e18
+
     ).toFixed(6);
 
 
 }
+
+
 
 
 
@@ -382,7 +465,7 @@ async function getEthereumTransactions(address) {
 
 
 
-    if (data.status !== "1") {
+    if(data.status !== "1") {
 
         return [];
 
@@ -401,17 +484,17 @@ async function getEthereumTransactions(address) {
 
 
 
+// =================================
+// BITCOIN FUNCTIONS
+// =================================
 
-// =======================
-// BITCOIN
-// =======================
 
 
 async function getBitcoinBalance(address) {
 
 
     const url =
-        `https://blockstream.info/api/address/${address}`;
+    `https://blockstream.info/api/address/${address}`;
 
 
 
@@ -442,6 +525,35 @@ async function getBitcoinBalance(address) {
         100000000
 
     ).toFixed(8);
+
+
+}
+
+
+
+
+
+
+
+async function getBitcoinTransactions(address) {
+
+
+    const url =
+    `https://blockstream.info/api/address/${address}/txs`;
+
+
+
+    const response =
+        await fetch(url);
+
+
+
+    const data =
+        await response.json();
+
+
+
+    return data.slice(0,5);
 
 
 }
