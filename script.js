@@ -1,137 +1,120 @@
+const ETHERSCAN_API_KEY = "YOUR_NEW_ETHERSCAN_API_KEY";
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const walletForm = document.getElementById("walletForm");
     const payButton = document.getElementById("payButton");
     const walletResult = document.getElementById("walletResult");
 
+    walletForm?.addEventListener("submit", async function (event) {
 
-    // Wallet Form
+        event.preventDefault();
 
-    if (walletForm) {
+        const wallet = document
+            .getElementById("wallet")
+            .value
+            .trim();
 
-        walletForm.addEventListener("submit", function(event) {
+        const network = document
+            .getElementById("network")
+            .value;
 
-            event.preventDefault();
+        if (network !== "ethereum") {
 
+            walletResult.innerHTML = `
+                <div class="report">
+                    <h3>Coming Soon</h3>
+                    <p>${network} support is not yet available.</p>
+                </div>
+            `;
 
-            const wallet = document
-                .getElementById("wallet")
-                .value
-                .trim();
+            return;
+        }
 
+        if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
 
-            const network = document
-                .getElementById("network")
-                .value;
+            alert("Please enter a valid Ethereum address.");
 
+            return;
+        }
 
+        walletResult.innerHTML = `
+            <div class="report">
+                <p>Loading wallet information...</p>
+            </div>
+        `;
 
-            if (wallet.length < 10) {
+        try {
 
-                alert(
-                    "Please enter a valid public wallet address."
-                );
-
-                return;
-
-            }
-
-
-
-            const walletRequest = {
-
-                address: wallet,
-                blockchain: network,
-                date: new Date().toISOString()
-
-            };
-
-
+            const balance = await getEthereumBalance(wallet);
 
             localStorage.setItem(
                 "walletRequest",
-                JSON.stringify(walletRequest)
+                JSON.stringify({
+                    address: wallet,
+                    blockchain: network,
+                    balance: balance,
+                    date: new Date().toISOString()
+                })
             );
 
-
-
-            if (walletResult) {
-
-                walletResult.innerHTML = `
-
+            walletResult.innerHTML = `
                 <div class="report">
 
-                    <h3>
-                    Wallet Detected
-                    </h3>
+                    <h3>Wallet Detected</h3>
 
+                    <p><strong>Blockchain:</strong> Ethereum</p>
 
-                    <p>
-                    Blockchain:
-                    <strong>${network}</strong>
-                    </p>
+                    <p><strong>Address:</strong></p>
 
+                    <code>${wallet}</code>
 
-                    <p>
-                    Public Address:
-                    </p>
-
-
-                    <code>
-                    ${wallet}
-                    </code>
-
-
-                    <p>
-                    Ready for report generation.
-                    </p>
+                    <p><strong>Balance:</strong> ${balance} ETH</p>
 
                 </div>
+            `;
 
-                `;
+        } catch (error) {
 
-            }
+            console.error(error);
 
+            walletResult.innerHTML = `
+                <div class="report">
 
-        });
+                    <h3>Error</h3>
 
-    }
+                    <p>Unable to retrieve wallet information.</p>
 
+                </div>
+            `;
+        }
 
+    });
 
+    payButton?.addEventListener("click", function () {
 
-    // Payment Button
+        alert("This demo currently displays public blockchain information only.");
 
-    if (payButton) {
-
-        payButton.addEventListener("click", function() {
-
-
-            const request =
-                localStorage.getItem("walletRequest");
-
-
-
-            if (!request) {
-
-                alert(
-                    "Please enter your wallet address first."
-                );
-
-                return;
-
-            }
-
-
-
-            alert(
-                "Payment system will be connected next."
-            );
-
-
-        });
-
-    }
-
+    });
 
 });
+
+async function getEthereumBalance(address) {
+
+    const url =
+        `https://api.etherscan.io/v2/api?chainid=1&module=account&action=balance&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error("Network error");
+    }
+
+    const data = await response.json();
+
+    if (data.status !== "1") {
+        throw new Error(data.result || "API error");
+    }
+
+    return (Number(data.result) / 1e18).toFixed(6);
+}
