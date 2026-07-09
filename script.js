@@ -1,4 +1,4 @@
-const ETHERSCAN_API_KEY = "YOUR_NEW_ETHERSCAN_API_KEY";
+const ETHERSCAN_API_KEY = "DF9GPBMVKDKDGP9UC2665RBKZ1MA3FFAF4";
 
 document.addEventListener("DOMContentLoaded", function () {
 
